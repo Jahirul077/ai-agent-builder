@@ -87,7 +87,7 @@ function App() {
     }, 8000)
 
     return () => clearInterval(analyticsInterval)
-  }, [])
+  }, [agentName])
 
   const fetchAPI = async () => {
     setLoading(true)
@@ -103,9 +103,9 @@ function App() {
       }
       const jsonData: AgentData = await response.json()
       setData(jsonData)
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error fetching data:', err)
-      setError(err.message || 'Failed to fetch agent data')
+      setError(err instanceof Error ? err.message : 'Failed to fetch agent data')
     } finally {
       setLoading(false)
     }
