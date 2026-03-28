@@ -119,22 +119,17 @@ function App() {
   const handleLayerSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const layerId = e.target.value;
     if (layerId && !selectedLayers.includes(layerId)) {
-      selectedLayers.push(layerId)
-      setSelectedLayers(selectedLayers)
+      setSelectedLayers(prev => [...prev, layerId])
     }
     e.target.value = ""; // Reset dropdown
-
-    fetchAPI()
   }
 
   const handleSkillSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const skillId = e.target.value;
     if (skillId && !selectedSkills.includes(skillId)) {
-      setSelectedSkills([...selectedSkills, skillId]);
+      setSelectedSkills(prev => [...prev, skillId]);
     }
     e.target.value = ""; // Reset dropdown
-
-    fetchAPI()
   }
 
   const handleSaveAgent = () => {
@@ -206,7 +201,6 @@ function App() {
                     value={selectedProfile}
                     onChange={(e) => {
                       setSelectedProfile(e.target.value)
-                      fetchAPI()
                     }}
                     style={{ width: '100%', padding: '0.5rem' }}
                   >
