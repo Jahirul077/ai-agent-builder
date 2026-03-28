@@ -159,7 +159,14 @@ function App() {
     const updatedAgents = [...savedAgents, newAgent]
     setSavedAgents(updatedAgents)
     localStorage.setItem('savedAgents', JSON.stringify(updatedAgents))
+    
+    // Reset all form fields for the next agent
     setAgentName('')
+    setSelectedProfile('')
+    setSelectedSkills([])
+    setSelectedLayers([])
+    setSelectedProvider('')
+    
     alert(`Agent "${newAgent.name}" saved successfully!`)
   }
 
