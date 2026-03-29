@@ -197,7 +197,7 @@ function App() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', padding: '1rem', fontFamily: 'sans-serif' }}>
       <header style={{ marginBottom: '2rem' }}>
-        <h1 className='text-2xl bg-red-500'>AI Agent Builder</h1>
+        <h1 >AI Agent Builder</h1>
         <p>Design your custom AI personality and capability set.</p>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <button onClick={fetchAPI} disabled={loading}>
