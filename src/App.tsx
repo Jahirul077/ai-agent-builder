@@ -142,7 +142,7 @@ function App() {
   // Fetch data on initial component mount
   useEffect(() => {
     fetchAPI()
-  }, [])
+  }, [fetchAPI])
 
   const handleLayerSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const layerId = e.target.value;
@@ -197,7 +197,7 @@ function App() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', padding: '1rem', fontFamily: 'sans-serif' }}>
       <header style={{ marginBottom: '2rem' }}>
-        <h1>AI Agent Builder</h1>
+        <h1 className='text-2xl bg-red-500'>AI Agent Builder</h1>
         <p>Design your custom AI personality and capability set.</p>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <button onClick={fetchAPI} disabled={loading}>
@@ -363,6 +363,7 @@ function App() {
                     type="text"
                     placeholder="Enter agent name..."
                     value={agentName}
+                    
                     onChange={e => setAgentName(e.target.value)}
                     style={{ flex: 1, padding: '0.5rem' }}
                   />
@@ -379,7 +380,7 @@ function App() {
         {savedAgents.length > 0 && (
           <section style={{ padding: '1.5rem', background: '#e0f7fa', borderRadius: '8px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h2 style={{ margin: 0 }}>Saved Agents</h2>
+              <h2  style={{ margin: 0 }}>Saved Agents</h2>
               <button
                 onClick={() => {
                   if (confirm('Are you sure you want to clear all saved agents?')) {
