@@ -61,31 +61,34 @@ function App() {
   const [selectedProfile, setSelectedProfile] = useState<string>('')
   const [selectedSkills, setSelectedSkills] = useState<string[]>([])
   const [selectedLayers, setSelectedLayers] = useState<string[]>([])
+  const [selectedProvider, setSelectedProvider] = useState<string>('')
+
 
   // Saving states
   const [agentName, setAgentName] = useState('')
-  const [savedAgents, setSavedAgents] = useState<SavedAgent[]>([])
-  const [selectedProvider, setSelectedProvider] = useState<string>('')
+  const [savedAgents, setSavedAgents] = useState<SavedAgent[]>(() => {
+    const saved = localStorage.getItem('savedAgents')
+    if (saved) {
+      try {
+        return JSON.parse(saved)
+      } catch (e) {
+        console.error('Failed to parse saved agents', e)
+        return []
+      }
+    }
+    return []
+  })
 
   const handleDeleteAgent = (indexToRemove: number) => {
-    const updatedAgents = savedAgents.filter((_, index) => index !== indexToRemove)
-    setSavedAgents(updatedAgents)
-    localStorage.setItem('savedAgents', JSON.stringify(updatedAgents))
+    setSavedAgents(prev => prev.filter((_, index) => index !== indexToRemove))
   }
 
 
 
+  // Synchronize savedAgents with localStorage automatically
   useEffect(() => {
-    // Load saved agents from local storage on component mount
-    const saved = localStorage.getItem('savedAgents')
-    if (saved) {
-      try {
-        setSavedAgents(JSON.parse(saved))
-      } catch (e) {
-        console.error('Failed to parse saved agents', e)
-      }
-    }
-  }, [])
+    localStorage.setItem('savedAgents', JSON.stringify(savedAgents))
+  }, [savedAgents])
 
   useEffect(() => {
     const analyticsInterval = setInterval(() => {
@@ -156,9 +159,7 @@ function App() {
       provider: selectedProvider,
     }
 
-    const updatedAgents = [...savedAgents, newAgent]
-    setSavedAgents(updatedAgents)
-    localStorage.setItem('savedAgents', JSON.stringify(updatedAgents))
+    setSavedAgents(prev => [...prev, newAgent])
     
     // Reset all form fields for the next agent
     setAgentName('')
