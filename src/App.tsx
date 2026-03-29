@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 // Define the types based on data.json
 interface AgentProfile {
@@ -90,17 +90,22 @@ function App() {
     localStorage.setItem('savedAgents', JSON.stringify(savedAgents))
   }, [savedAgents])
 
+  const agentNameRef = useRef(agentName)
+  useEffect(() => {
+    agentNameRef.current = agentName
+  }, [agentName])
+
   useEffect(() => {
     const analyticsInterval = setInterval(() => {
-      if (agentName !== '') {
-        console.log(`[Analytics Heartbeat] User is working on agent named: "${agentName}"`)
+      if (agentNameRef.current !== '') {
+        console.log(`[Analytics Heartbeat] User is working on agent named: "${agentNameRef.current}"`)
       } else {
         console.log(`[Analytics Heartbeat] User is working on an unnamed agent draft...`)
       }
     }, 8000)
 
     return () => clearInterval(analyticsInterval)
-  }, [agentName])
+  }, [])
 
   const fetchAPI = async () => {
     setLoading(true)
