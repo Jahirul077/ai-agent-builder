@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 
 // Define the types based on data.json
 interface AgentProfile {
@@ -107,13 +107,17 @@ function App() {
     return () => clearInterval(analyticsInterval)
   }, [])
 
-  const fetchAPI = async () => {
+  const fetchAPI = useCallback(async () => {
     setLoading(true)
     setError(null)
+    let isMounted = true
+
     try {
       // Simulate network delay and randomness (1 to 3 seconds)
       const delay = Math.floor(Math.random() * 2000) + 1000
       await new Promise((resolve) => setTimeout(resolve, delay))
+
+      if (!isMounted) return
 
       const response = await fetch('/data.json')
       if (!response.ok) {
@@ -122,12 +126,18 @@ function App() {
       const jsonData: AgentData = await response.json()
       setData(jsonData)
     } catch (err) {
-      console.error('Error fetching data:', err)
-      setError(err instanceof Error ? err.message : 'Failed to fetch agent data')
+      if (isMounted) {
+        console.error('Error fetching data:', err)
+        setError(err instanceof Error ? err.message : 'Failed to fetch agent data')
+      }
     } finally {
-      setLoading(false)
+      if (isMounted) {
+        setLoading(false)
+      }
     }
-  }
+
+    return () => { isMounted = false }
+  }, [])
 
   // Fetch data on initial component mount
   useEffect(() => {
